@@ -2,10 +2,12 @@
 module.exports = {
     enabled: true, 
     lavalink: {
-      name: "GlaceYT",
-      password: "glace",
-      host: "87.106.62.92",
-      port:  11642,
-      secure: false
+        name: "RailwayNode",
+        password: "youshallnotpass",
+        host: "lavalink-production-yourname.up.railway.app", // replace with your actual Railway Lavalink domain
+        port: 2333,
+        secure: false
     }
 };
+
+
