@@ -124,32 +124,24 @@ module.exports = {
         return subcommands;
     },
 
-    async execute(interaction) {
-    // Handle both slash and prefix versions safely
+     async execute(interaction) {
     try {
-        if (interaction.deferReply) {
+        // Slash command handler
+        if (interaction && typeof interaction.deferReply === "function") {
             await interaction.deferReply();
-        } else if (interaction.reply) {
-            // Prefix message
-            return interaction.reply("📜 Use `/help` for the full help menu (slash command interface).");
-        } else {
-            console.warn("Unknown help trigger type.");
+        } 
+        // Prefix (message) handler
+        else if (interaction && typeof interaction.reply === "function") {
+            return interaction.reply("📜 Use `/help` for the advanced help menu (slash command version).");
+        } 
+        // Fallback
+        else {
+            console.warn("Unknown help trigger type received.");
             return;
         }
     } catch (err) {
-        console.error("Help command error:", err);
+        console.error("Help command failed to initialize:", err);
     }
-
-    const specificCommand = interaction.options?.getString
-        ? interaction.options.getString('command')
-        : null;
-
-    if (specificCommand) {
-        return this.showCommandDetails(interaction, specificCommand);
-    }
-
-    return this.showMainHelp(interaction);
-},
     async showCommandDetails(interaction, commandName) {
         const commands = this.getAllCommands();
         const cmd = commands.find(c => c.name.toLowerCase() === commandName.toLowerCase());
