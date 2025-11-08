@@ -125,17 +125,31 @@ module.exports = {
     },
 
     async execute(interaction) {
-        await interaction.deferReply();
-
-        const specificCommand = interaction.options.getString('command');
-
-        if (specificCommand) {
-            return this.showCommandDetails(interaction, specificCommand);
+    // Handle both slash and prefix versions safely
+    try {
+        if (interaction.deferReply) {
+            await interaction.deferReply();
+        } else if (interaction.reply) {
+            // Prefix message
+            return interaction.reply("📜 Use `/help` for the full help menu (slash command interface).");
+        } else {
+            console.warn("Unknown help trigger type.");
+            return;
         }
+    } catch (err) {
+        console.error("Help command error:", err);
+    }
 
-        return this.showMainHelp(interaction);
-    },
+    const specificCommand = interaction.options?.getString
+        ? interaction.options.getString('command')
+        : null;
 
+    if (specificCommand) {
+        return this.showCommandDetails(interaction, specificCommand);
+    }
+
+    return this.showMainHelp(interaction);
+},
     async showCommandDetails(interaction, commandName) {
         const commands = this.getAllCommands();
         const cmd = commands.find(c => c.name.toLowerCase() === commandName.toLowerCase());
@@ -747,8 +761,8 @@ module.exports = {
  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝   ╚═╝      ╚═╝   
 
 -------------------------------------
-📡 Discord : https://discord.gg/xQF9f9yUEM
-🌐 Website : https://glaceyt.com
+📡 Discord : https://discord.gg/vFEwRwYweW
+🌐 Website :https://roronoazoroisback.github.io/Z-Security/
 🎥 YouTube : https://youtube.com/@GlaceYT
 ✅ Verified | 🧩 Tested | ⚙️ Stable
 -------------------------------------
