@@ -123,24 +123,22 @@ module.exports = {
         }
         return subcommands;
     },
-
-     async execute(interaction) {
+    async execute(interaction) {
     try {
-        // Slash command handler
+        // Safely handle both slash and prefix commands
         if (interaction && typeof interaction.deferReply === "function") {
             await interaction.deferReply();
-        } 
-        // Prefix (message) handler
-        else if (interaction && typeof interaction.reply === "function") {
+        } else if (interaction && typeof interaction.reply === "function") {
             return interaction.reply("📜 Use `/help` for the advanced help menu (slash command version).");
-        } 
-        // Fallback
-        else {
+        } else {
             console.warn("Unknown help trigger type received.");
             return;
         }
+
+        return this.showMainHelp(interaction);
+
     } catch (err) {
-        console.error("Help command failed to initialize:", err);
+        console.error("Help command failed:", err);
     }
      },
     async showCommandDetails(interaction, commandName) {
