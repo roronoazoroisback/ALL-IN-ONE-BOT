@@ -142,6 +142,7 @@ module.exports = {
     } catch (err) {
         console.error("Help command failed to initialize:", err);
     }
+     },
     async showCommandDetails(interaction, commandName) {
         const commands = this.getAllCommands();
         const cmd = commands.find(c => c.name.toLowerCase() === commandName.toLowerCase());
